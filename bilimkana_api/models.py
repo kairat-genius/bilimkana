@@ -10,3 +10,19 @@ class FAQ(TranslatableModel):
 
     def __str__(self):
         return self.safe_translation_getter('question', any_language=True)
+
+class News(TranslatableModel):
+    image = models.ImageField()
+    translations = TranslatedFields(
+        title=models.CharField(max_length=255),
+        text=models.TextField(),
+    )
+
+    def __str__(self):
+        return self.safe_translation_getter('title', any_language=True)
+class Events(TranslatableModel):
+    image = models.ImageField()
+    translations = TranslatedFields(
+        title=models.CharField(max_length=255),
+        text=models.TextField(),
+    )
