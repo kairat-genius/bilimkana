@@ -19,10 +19,13 @@ class News(TranslatableModel):
     )
 
     def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+        return self.safe_translation_getter('title,text', any_language=True)
 class Events(TranslatableModel):
     image = models.ImageField()
     translations = TranslatedFields(
         title=models.CharField(max_length=255),
         text=models.TextField(),
     )
+
+    def __str__(self):
+        return self.safe_translation_getter('title,text', any_language=True)
