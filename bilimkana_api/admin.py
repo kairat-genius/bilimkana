@@ -1,19 +1,33 @@
-from django.contrib import admin
-from parler.admin import TranslatableAdmin
 from .models import FAQ
+
+from django.contrib import admin
+
+from modeltranslation.translator import register, TranslationOptions
+
+from modeltranslation.admin import TranslationAdmin
+
+@register(FAQ)
+class FAQTranslationOptions(TranslationOptions):
+    fields = ('question', 'answer')
 
 
 @admin.register(FAQ)
-class FAQAdmin(TranslatableAdmin):
-    """Административная панель для часто задаваемых вопросов (FAQ)"""
+class FAQAdmin(TranslationAdmin):
+    list_display = ('question', 'answer')
 
-    list_display = ('get_question', 'get_answer')
-    search_fields = ('translations__question', 'translations__answer')
 
-    def get_question(self, obj):
-        return obj.safe_translation_getter('question', any_language=True)
-    get_question.short_description = 'Вопрос'
+# @admin.register(Category)
+# class CategoryAdmin(TranslatableAdmin):
+#     pass
 
-    def get_answer(self, obj):
-        return obj.safe_translation_getter('answer', any_language=True)
-    get_answer.short_description = 'Ответ'
+#
+# @admin.register(Program)
+# class ProgramAdmin(TranslatableAdmin):
+#
+#     pass
+#
+#
+# @admin.register(Teacher)
+# class TeacherAdmin(TranslatableAdmin):
+#
+#     pass
