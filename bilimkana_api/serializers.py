@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FAQ, Category, Program, Teacher
+from .models import FAQ, Category, Program, Teacher, News, Events
 
 class TranslationSerializerMixin:
     """Миксин для сериализаторов, поддерживающих переводы полей."""
@@ -81,3 +81,31 @@ class TeacherSerializer(serializers.ModelSerializer, TranslationSerializerMixin)
     def get_education(self, obj):
         lang = self.context.get('lang', 'ru')
         return self.get_localized_field(obj, 'education', lang)
+
+class NewsSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+
+    class Meta:
+        model = News
+        fields = ['id', 'img', 'title', 'description']
+
+    def get_title(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'title', lang)
+
+    def get_text(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'text', lang)
+
+
+class EventsSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+    class Meta:
+        model = Events
+        fields = ['id', 'img', 'title', 'description']
+
+    def get_title(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'title', lang)
+
+    def get_text(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'text', lang)
