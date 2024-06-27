@@ -1,4 +1,3 @@
-from parler.models import TranslatableModel, TranslatedFields
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -14,37 +13,40 @@ class FAQ(models.Model):
         return self.question
 
 
-class Category(TranslatableModel):
+class Category(models.Model):
     """Категория программы"""
     img = models.TextField()
-    translations = TranslatedFields(
-        title=models.CharField(max_length=100),
-        description=models.TextField(),
-    )
-    def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+    title = models.CharField(max_length=100, verbose_name=_('Title'))
+    description = models.TextField(verbose_name=_('Description'))
 
-class Program(TranslatableModel):
+    def __str__(self):
+        return self.title
+
+class Program(models.Model):
+    """Программы"""
     img = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    translations = TranslatedFields(
-        title=models.CharField(max_length=100),
-        description=models.TextField(),
-    )
-    def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+    title = models.CharField(max_length=100, verbose_name=_('Title'))
+    description = models.TextField(verbose_name=_('Description'))
 
-class Teacher(TranslatableModel):
+    def __str__(self):
+        return self.title
+
+
+class Teacher(models.Model):
+    """Преподаватели"""
     img = models.TextField()
     phone_number = models.CharField(max_length=30)
     email = models.EmailField(max_length=100)
     telegram = models.CharField(max_length=100)
     whatsapp = models.CharField(max_length=30)
-    translations = TranslatedFields(
-        name=models.CharField(max_length=50),
-        speciality=models.CharField(max_length=100),
-        education=models.TextField(),
-    )
+    name = models.CharField(max_length=50, verbose_name=_('Name'))
+    speciality = models.CharField(max_length=100, verbose_name=_('Speciality'))
+    education = models.TextField(verbose_name=_('Education'))
 
     def __str__(self):
-        return self.safe_translation_getter('name', any_language=True)
+        return self.name
+
+
+
+

@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'bilimkana_api',
-    'parler',
     'modeltranslation',
 
 ]
@@ -139,21 +139,10 @@ REST_FRAMEWORK = {
 
 from django.utils.translation import gettext_lazy as _
 
-PARLER_LANGUAGES = {
-    None: (
-        {'code': 'ru', 'name': _('Русский')},
-        {'code': 'en', 'name': _('English')},
-        {'code': 'ky', 'name': _('Кыргызский')},
-    ),
-    'default': {
-        'fallbacks': ['ru'],
-        'hide_untranslated': False,
-    }
-}
-
 LANGUAGES = [
-    ('en', _('English')),
+
     ('ru', _('Russian')),
+    ('en', _('English')),
     ('ky', _('Kyrgyz')),
 ]
 
