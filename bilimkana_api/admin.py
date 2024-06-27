@@ -1,11 +1,9 @@
-from .models import FAQ, Category, Program, Teacher
-
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-
 from modeltranslation.admin import TranslationAdmin
-
 from modeltranslation.translator import register, TranslationOptions
+
+from .models import FAQ, Category, Program, Teacher
 from .forms import ImgModelForm
 
 
