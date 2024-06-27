@@ -15,7 +15,7 @@ class FAQ(models.Model):
 
 class Category(models.Model):
     """Категория программы"""
-    img = models.TextField()
+    img = models.TextField("Изображение в base64", blank=True, null=True)
     title = models.CharField(max_length=100, verbose_name=_('Title'))
     description = models.TextField(verbose_name=_('Description'))
 
@@ -24,7 +24,7 @@ class Category(models.Model):
 
 class Program(models.Model):
     """Программы"""
-    img = models.TextField()
+    img = models.TextField("Изображение в base64", blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=100, verbose_name=_('Title'))
     description = models.TextField(verbose_name=_('Description'))
@@ -35,7 +35,7 @@ class Program(models.Model):
 
 class Teacher(models.Model):
     """Преподаватели"""
-    img = models.TextField()
+    img = models.TextField("Изображение в base64", blank=True, null=True)
     phone_number = models.CharField(max_length=30)
     email = models.EmailField(max_length=100)
     telegram = models.CharField(max_length=100)
