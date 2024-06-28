@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from modeltranslation.admin import TranslationAdmin
 from modeltranslation.translator import register, TranslationOptions
 
-from .models import FAQ, Category, Program, Teacher
+from .models import FAQ, Category, Program, Teacher, News, Events
 from .forms import ImgModelForm
 
 
