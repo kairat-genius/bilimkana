@@ -1,48 +1,78 @@
 from django.contrib import admin
-from parler.admin import TranslatableAdmin
-from .models import FAQ, News, Events
+from django.utils.safestring import mark_safe
+from modeltranslation.admin import TranslationAdmin
+from modeltranslation.translator import register, TranslationOptions
+
+from .models import FAQ, Category, Program, Teacher, News, Events, Applications
+from .forms import ImgModelForm
+
+
+@register(Category)
+class CategoryTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(Program)
+class ProgramTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+
+@register(Teacher)
+class TeacherTranslationOptions(TranslationOptions):
+    fields = ('name', 'speciality', 'education')
+
+
+@register(FAQ)
+class FAQTranslationOptions(TranslationOptions):
+    fields = ('question', 'answer')
 
 
 @admin.register(FAQ)
-class FAQAdmin(TranslatableAdmin):
-    """Административная панель для часто задаваемых вопросов (FAQ)"""
+class FAQAdmin(TranslationAdmin):
+    list_display = ('answer', 'question')
 
-    list_display = ('get_question', 'get_answer')
-    search_fields = ('translations__question', 'translations__answer')
+@register(News)
+class NewsTranslationOptions(TranslationOptions):
+    fields = ('title', 'text')
 
-    def get_question(self, obj):
-        return obj.safe_translation_getter('question', any_language=True)
-    get_question.short_description = 'Вопрос'
+@register(Events)
+class EventsTranslationOptions(TranslationOptions):
+    fields = ('title', 'text')
 
-    def get_answer(self, obj):
-        return obj.safe_translation_getter('answer', any_language=True)
-    get_answer.short_description = 'Ответ'
+
+class ImageMixin(TranslationAdmin):
+    list_display = ('title', 'image_tag')
+    exclude = ('img',)
+
+    form = ImgModelForm
+
+    def image_tag(self, obj):
+        if obj.img:
+            return mark_safe('<img src="data:image/jpeg;base64,{}" width="50" height="50" />'.format(obj.img))
+        return None
+
+    image_tag.short_description = 'Image'
+
+
+@admin.register(Category)
+class CategoryAdmin(ImageMixin):
+    pass
+
+
+@admin.register(Program)
+class ProgramAdmin(ImageMixin):
+    pass
+
+
+@admin.register(Teacher)
+class TeacherAdmin(ImageMixin):
+    list_display = ('name', 'image_tag')
+
 
 @admin.register(News)
-class NewsAdmin(TranslatableAdmin):
-    list_display = ('get_title', 'get_text')
-    search_fields = ('translations__title', 'translations__text')
-
-    def get_title(self, obj):
-        return obj.safe_translation_getter('title', any_language=True)
-    get_title.short_description = 'Название'
-
-    def get_text(self, obj):
-        return obj.safe_translation_getter('text', any_language=True)
-
-    get_text.short_description = "Текст"
+class NewsAdmin(ImageMixin):
+    pass
 
 @admin.register(Events)
-class EventsAdmin(TranslatableAdmin):
-    list_display = ('get_title', 'get_text')
-    search_fields = ('translations__title', 'translations__text')
-
-    def get_title(self, obj):
-        return obj.safe_translation_getter('title', any_language=True)
-    get_title.short_description = "Название"
-
-    def get_text(self, obj):
-        return obj.safe_translation_getter('text', any_language=True)
-    get_text.short_description = "Текст"
-
+class EventsAdmin(ImageMixin):
+    pass
 
