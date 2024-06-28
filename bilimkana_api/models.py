@@ -71,7 +71,7 @@ class Applications(models.Model):
     surname = models.CharField(max_length=300, verbose_name="Фамилие")
     number = models.CharField(max_length=150, verbose_name="Номер")
     email = models.EmailField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=False)
 
     def __str__(self):
         return self.name

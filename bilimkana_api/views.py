@@ -1,9 +1,9 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 
-from .models import FAQ, Category, Program, Teacher
-from .serializers import FAQSerializer, CategorySerializer, ProgramSerializer, TeacherSerializer, ApplicationsSerializer
+from .models import FAQ, Category, Program, Teacher, Applications, News, Events
+from .serializers import FAQSerializer, CategorySerializer, ProgramSerializer, TeacherSerializer, NewsSerializer, EventsSerializer, ApplicationsSerializer
 
 class FAQListAPIView(generics.ListAPIView):
     queryset = FAQ.objects.all()
@@ -46,9 +46,41 @@ class TeacherListAPIView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-@api_view(['POST'])
-def create_application(request):
-    serializer = ApplicationsSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data, status=201)
+class NewsListAPIView(generics.ListAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = NewsSerializer
+
+    def list(self, request, *args, **kwargs):
+        lang = request.query_params.get('lang', 'ru')
+        queryset = self.get_queryset()
+        serializer = NewsSerializer(queryset, many=True, context={'lang': lang})
+        return Response(serializer.data)
+
+
+class EventsListAPIView(generics.ListAPIView):
+    queryset = Events.objects.all()
+    serializer_class = EventsSerializer
+
+    def list(self, request, *args, **kwargs):
+        lang = request.query_params.get('lang', 'ru')
+        queryset = self.get_queryset()
+        serializer = EventsSerializer(queryset, many=True, context={'lang': lang})
+        return Response(serializer.data)
+
+
+class ApplicationListAPIView(generics.ListAPIView):
+    queryset = Applications.objects.all()
+    serializer_class = ApplicationsSerializer
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = ApplicationsSerializer(queryset, many=True, context={'lang': 'ru'})
+        return Response(serializer.data)
+
+
+class ApplicationCreateAPIView(generics.CreateAPIView):
+    queryset = Applications.objects.all()
+    serializer_class = ApplicationsSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
