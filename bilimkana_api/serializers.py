@@ -101,7 +101,7 @@ class NewsSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
 class EventsSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
     class Meta:
         model = Events
-        fields = ['id', 'img', 'title', 'description']
+        fields = ['id', 'img', 'title', 'text']
 
     def get_title(self, obj):
         lang = self.context.get('lang', 'ru')
