@@ -76,3 +76,6 @@ class NewsAdmin(ImageMixin):
 class EventsAdmin(ImageMixin):
     pass
 
+@admin.register(Applications)
+class ApplicationsAdmin(ImageMixin):
+    ...
