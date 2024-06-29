@@ -38,6 +38,9 @@ class NewsTranslationOptions(TranslationOptions):
 class EventsTranslationOptions(TranslationOptions):
     fields = ('title', 'text')
 
+# @register(Applications)
+# class ApplicationsTranslationOptions(TranslationOptions):
+#     pass
 
 class ImageMixin(TranslationAdmin):
     list_display = ('title', 'image_tag')
@@ -76,6 +79,13 @@ class NewsAdmin(ImageMixin):
 class EventsAdmin(ImageMixin):
     pass
 
-@admin.register(Applications)
-class ApplicationsAdmin(ImageMixin):
-    ...
+# @admin.register(Applications)
+# class ApplicationsAdmin(ImageMixin):
+#     pass
+
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'surname', 'category']
+    list_filter = ['category']
+    search_fields = ('name', 'surname',)
+
+admin.site.register(Applications, ApplicationAdmin)
