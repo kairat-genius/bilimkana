@@ -51,8 +51,8 @@ class Teacher(models.Model):
 class News(models.Model):
     """Новости"""
     img = models.TextField("Изображение BASE64", blank=True, null=True)
-    title = models.CharField(max_length=100, verbose_name=_("Заголовок"))
-    text = models.TextField(verbose_name=_("Текст"))
+    title = models.CharField(max_length=100, verbose_name=_("Title"))
+    text = models.TextField(verbose_name=_("Text"))
 
     def __str__(self):
         return self.title
@@ -60,8 +60,8 @@ class News(models.Model):
 class Events(models.Model):
     """События"""
     img = models.TextField("Изображение BASE64", blank=True, null=True)
-    title = models.CharField(max_length=100, verbose_name=_("Заголовок"))
-    text = models.TextField(verbose_name=_("Текст"))
+    title = models.CharField(max_length=100, verbose_name=_("Title"))
+    text = models.TextField(verbose_name=_("Text"))
 
     def __str__(self):
         return self.title
