@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import FAQ, Category, Program, Teacher
+from .models import FAQ, Category, Program, Teacher, News, Events
 
-class TranslationSerializerMixin:
+class TranslationSerializerMixin(serializers.ModelSerializer):
     """Миксин для сериализаторов, поддерживающих переводы полей."""
 
     def get_localized_field(self, obj, field_name, lang):
@@ -12,7 +12,19 @@ class TranslationSerializerMixin:
         lang_field_name = f'{field_name}_{lang}'
         return getattr(obj, lang_field_name, getattr(obj, default_field_name))
 
-class FAQSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+
+class TitleDescriptionMixin:
+    def get_title(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'title', lang)
+
+    def get_description(self, obj):
+        lang = self.context.get('lang', 'ru')
+        return self.get_localized_field(obj, 'description', lang)
+
+
+
+class FAQSerializer(TranslationSerializerMixin):
     question = serializers.SerializerMethodField()
     answer = serializers.SerializerMethodField()
 
@@ -28,7 +40,7 @@ class FAQSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
         lang = self.context.get('lang', 'ru')
         return self.get_localized_field(obj, 'answer', lang)
 
-class CategorySerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+class CategorySerializer(TranslationSerializerMixin, TitleDescriptionMixin):
     title = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
 
@@ -36,15 +48,7 @@ class CategorySerializer(serializers.ModelSerializer, TranslationSerializerMixin
         model = Category
         fields = ['id', 'img', 'title', 'description']
 
-    def get_title(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'title', lang)
-
-    def get_description(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'description', lang)
-
-class ProgramSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+class ProgramSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
     title = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     category = CategorySerializer()
@@ -53,15 +57,7 @@ class ProgramSerializer(serializers.ModelSerializer, TranslationSerializerMixin)
         model = Program
         fields = ['id', 'img', 'category', 'title', 'description']
 
-    def get_title(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'title', lang)
-
-    def get_description(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'description', lang)
-
-class TeacherSerializer(serializers.ModelSerializer, TranslationSerializerMixin):
+class TeacherSerializer(TranslationSerializerMixin):
     name = serializers.SerializerMethodField()
     speciality = serializers.SerializerMethodField()
     education = serializers.SerializerMethodField()
@@ -81,3 +77,19 @@ class TeacherSerializer(serializers.ModelSerializer, TranslationSerializerMixin)
     def get_education(self, obj):
         lang = self.context.get('lang', 'ru')
         return self.get_localized_field(obj, 'education', lang)
+
+class NewsSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = News
+        fields = ['id', 'img', 'title', 'description']
+
+class EventsSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = News
+        fields = ['id', 'img', 'title', 'description']

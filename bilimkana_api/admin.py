@@ -1,4 +1,4 @@
-from .models import FAQ, Category, Program, Teacher
+from .models import FAQ, Category, Program, Teacher, Events, News
 
 from django.contrib import admin
 from django.utils.safestring import mark_safe
@@ -7,6 +7,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from modeltranslation.translator import register, TranslationOptions
 from .forms import ImgModelForm
+
 
 
 @register(Category)
@@ -27,10 +28,16 @@ class TeacherTranslationOptions(TranslationOptions):
 class FAQTranslationOptions(TranslationOptions):
     fields = ('question', 'answer')
 
+@register(Events)
+class EventsTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
 
-@admin.register(FAQ)
-class FAQAdmin(TranslationAdmin):
-    list_display = ('answer', 'question')
+@register(News)
+class NewsTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+
+
 
 
 class ImageMixin(TranslationAdmin):
@@ -46,6 +53,16 @@ class ImageMixin(TranslationAdmin):
 
     image_tag.short_description = 'Image'
 
+    class Media:
+        js = ('aftotranslte.js',)
+
+
+@admin.register(FAQ)
+class FAQAdmin(TranslationAdmin):
+    list_display = ('question', 'answer')
+
+    class Media:
+        js = ('aftotranslte.js',)
 
 @admin.register(Category)
 class CategoryAdmin(ImageMixin):
@@ -61,6 +78,14 @@ class ProgramAdmin(ImageMixin):
 class TeacherAdmin(ImageMixin):
     list_display = ('name', 'image_tag')
 
+
+@admin.register(Events)
+class EventsAdmin(ImageMixin):
+    pass
+
+@admin.register(News)
+class NewsAdmin(ImageMixin):
+    pass
 
 
 

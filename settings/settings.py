@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'drf_yasg',
+    'drf_spectacular',
     'bilimkana_api',
     'modeltranslation',
 
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -118,6 +119,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
@@ -133,9 +137,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Bilimkana',
+    'DESCRIPTION': 'Bilimkan API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'TAGS': [
+        {'name': 'FAQ', 'description': 'Endpoints related to FAQ'},
+        {'name': 'Category', 'description': 'Endpoints related to Categories'},
+        {'name': 'Program', 'description': 'Endpoints related to Programs'},
+        {'name': 'Teacher', 'description': 'Endpoints related to Teachers'},
+        {'name': 'News', 'description': 'Endpoints related to News'},
+        {'name': 'Events', 'description': 'Endpoints related to Events'},
+    ],
+}
+
 
 from django.utils.translation import gettext_lazy as _
 
