@@ -9,8 +9,6 @@ from googletrans import Translator
 import json
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
-
-
 @extend_schema(
     parameters=[
         OpenApiParameter(name='lang', type=str, location=OpenApiParameter.QUERY,
@@ -147,8 +145,6 @@ class EventsDetailAPIView(LanguageContextDetailMixin):
 
 
 """Переводчик для админ панели"""
-
-
 def translate_text(request):
     if request.method == 'POST':
         data = json.loads(request.body)

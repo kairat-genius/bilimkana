@@ -1,11 +1,22 @@
-from django.urls import path
 from .views import (FAQListAPIView, CategoryListAPIView, TeacherListAPIView, ProgramListAPIView, NewsListAPIView,
                     EventsListAPIView,
                     EventsDetailAPIView, ProgramDetailAPIView, NewsDetailAPIView, CategoryDetailAPIView)
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from django.contrib import admin
+from django.urls import path
+from bilimkana_api.views import translate_text
+
 
 urlpatterns = [
+
+    path('admin/', admin.site.urls),
+    path('translate/', translate_text, name='translate'),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+
     path('faq/', FAQListAPIView.as_view(), name='Вопросы и ответы'),
 
     # Категории

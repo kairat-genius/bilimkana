@@ -78,6 +78,8 @@ class ProgramAdmin(ImageMixin):
 class TeacherAdmin(ImageMixin):
     list_display = ('name', 'image_tag')
 
+    prepopulated_fields = {"phone_number": ("whatsapp",)}
+
 
 @admin.register(Events)
 class EventsAdmin(ImageMixin):

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*zlo+nvr7v)e132sc7*yyrhx0e*n-s8tfmghbq+@5+%*dcq!l0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django']
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'bilimkana_api',
     'modeltranslation',
+    'django.contrib.postgres',
 
 ]
 
@@ -78,12 +79,25 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'pgdb',
+        'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -142,7 +156,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Bilimkana',
     'DESCRIPTION': 'Bilimkan API',
@@ -157,7 +170,6 @@ SPECTACULAR_SETTINGS = {
         {'name': 'Events', 'description': 'Endpoints related to Events'},
     ],
 }
-
 
 from django.utils.translation import gettext_lazy as _
 
