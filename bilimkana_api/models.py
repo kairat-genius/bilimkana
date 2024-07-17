@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 class FAQ(models.Model):
     """F.A.Q. — «Frequently Asked Questions», «часто задаваемые вопросы»."""
-    question = models.TextField(verbose_name=_('Question'))
-    answer = models.TextField(verbose_name=_('Answer'))
+    question = models.TextField(verbose_name=_('Вопрос'))
+    answer = models.TextField(verbose_name=_('Ответ'))
 
     def __str__(self):
         return self.question
@@ -20,8 +20,8 @@ class FAQ(models.Model):
 class Category(models.Model):
     """Категория программы"""
     img = models.TextField("Изображение в base64", blank=True, null=True)
-    title = models.CharField(max_length=100, verbose_name=_('Title'))
-    description = models.TextField(verbose_name=_('Description'))
+    title = models.CharField(max_length=100, verbose_name=_('Название'))
+    description = models.TextField(verbose_name=_('Описание'))
 
     def __str__(self):
         return self.title
@@ -35,8 +35,8 @@ class Program(models.Model):
     """Программы"""
     img = models.TextField("Изображение в base64", blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    title = models.CharField(max_length=100, verbose_name=_('Title'))
-    description = models.TextField(verbose_name=_('Description'))
+    title = models.CharField(max_length=100, verbose_name=_('Название'))
+    description = models.TextField(verbose_name=_('Описание'))
 
     def __str__(self):
         return self.title
@@ -70,8 +70,8 @@ class Teacher(models.Model):
 class News(models.Model):
     """Новости"""
     img = models.TextField("Изображение в base64", blank=True, null=True)
-    title = models.CharField(max_length=255, verbose_name=_('Title'))
-    description = models.TextField(verbose_name=_('Description'))
+    title = models.CharField(max_length=255, verbose_name=_('Название'))
+    description = models.TextField(verbose_name=_('Описание'))
 
     def __str__(self):
         return self.title
@@ -82,11 +82,22 @@ class News(models.Model):
 
 
 
+class Description(models.Model):
+    """Дополнительное информация"""
+    title = models.CharField(max_length=150, verbose_name=_('Название'))
+    description = models.TextField(verbose_name=_('Описание'), blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Events(models.Model):
     """Событие"""
     img = models.TextField("Изображение в base64", blank=True, null=True)
-    title = models.CharField(max_length=255, verbose_name=_('Title'))
-    description = models.TextField(verbose_name=_('Description'))
+    title = models.CharField(max_length=255, verbose_name=_('Название'))
+    description = models.TextField(verbose_name=_('Описание'))
+    extra = models.ManyToManyField(Description, verbose_name=("Допольнительная информация"))
+    date = models.DateTimeField(verbose_name="Дата и время события", blank=True, null=True)
 
     def __str__(self):
         return self.title

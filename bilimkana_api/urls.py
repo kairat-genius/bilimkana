@@ -4,7 +4,7 @@ from .views import (FAQListAPIView, CategoryListAPIView, TeacherListAPIView, Pro
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from bilimkana_api.views import translate_text
 
 
@@ -15,7 +15,6 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
 
     path('faq/', FAQListAPIView.as_view(), name='Вопросы и ответы'),
 

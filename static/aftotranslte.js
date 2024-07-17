@@ -6,26 +6,37 @@ document.addEventListener('DOMContentLoaded', function() {
         { mainFieldId: 'id_name_ru', targetFieldIds: ['id_name_en', 'id_name_ky'] },
         { mainFieldId: 'id_speciality_ru', targetFieldIds: ['id_speciality_en', 'id_speciality_ky'] },
         { mainFieldId: 'id_education_ru', targetFieldIds: ['id_education_en', 'id_education_ky'] },
-        { mainFieldId: 'id_description_ru', targetFieldIds: ['id_description_en', 'id_description_ky'] },
-
+        { mainFieldId: 'id_description_ru', targetFieldIds: ['id_description_en', 'id_description_ky'], isCKEditor: true }
     ];
+
     translations.forEach(translation => {
-        setupTranslation(translation.mainFieldId, translation.targetFieldIds, '/translate/');
+        setupTranslation(translation.mainFieldId, translation.targetFieldIds, '/api/translate/', translation.isCKEditor);
     });
 });
 
+function setupTranslation(mainFieldId, targetFieldIds, url, isCKEditor = false) {
+    if (isCKEditor) {
+        CKEDITOR.on('instanceReady', function(event) {
+            const mainField = CKEDITOR.instances[mainFieldId];
+            const targetFields = targetFieldIds.map(id => CKEDITOR.instances[id]);
+            addChangeListener(mainField, targetFields, url, isCKEditor);
+        });
+    } else {
+        const mainField = document.getElementById(mainFieldId);
+        const targetFields = targetFieldIds.map(id => document.getElementById(id));
+        addChangeListener(mainField, targetFields, url, isCKEditor);
+    }
+}
 
-function setupTranslation(mainFieldId, targetFieldIds, url) {
-    const mainField = document.getElementById(mainFieldId);
-    const targetFields = targetFieldIds.map(id => document.getElementById(id));
+function addChangeListener(mainField, targetFields, url, isCKEditor) {
     let timer = null;
 
     if (mainField && targetFields.every(field => field !== null)) {
-        mainField.addEventListener('input', function() {
+        const eventListener = function() {
             clearTimeout(timer);
 
             timer = setTimeout(() => {
-                const textToTranslate = mainField.value.trim();
+                const textToTranslate = isCKEditor ? mainField.getData().trim() : mainField.value.trim();
 
                 if (textToTranslate) {
                     fetch(url, {
@@ -42,8 +53,13 @@ function setupTranslation(mainFieldId, targetFieldIds, url) {
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.translated_text) {
-                            targetFields[0].value = data.translated_text[0];
-                            targetFields[1].value = data.translated_text[1];
+                            if (isCKEditor) {
+                                targetFields[0].setData(data.translated_text[0]);
+                                targetFields[1].setData(data.translated_text[1]);
+                            } else {
+                                targetFields[0].value = data.translated_text[0];
+                                targetFields[1].value = data.translated_text[1];
+                            }
                         }
                     })
                     .catch(error => {
@@ -51,7 +67,13 @@ function setupTranslation(mainFieldId, targetFieldIds, url) {
                     });
                 }
             }, 500);
-        });
+        };
+
+        if (isCKEditor) {
+            mainField.on('change', eventListener);
+        } else {
+            mainField.addEventListener('input', eventListener);
+        }
     }
 }
 

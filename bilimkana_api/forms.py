@@ -2,7 +2,7 @@ import base64
 from django import forms
 
 class ImgModelForm(forms.ModelForm):
-    image = forms.ImageField(label='Upload Image', required=False)
+    image = forms.ImageField(label='Загрузить изображение', required=False)
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -14,3 +14,4 @@ class ImgModelForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+

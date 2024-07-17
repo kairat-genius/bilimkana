@@ -1,0 +1,15 @@
+.inline-field {
+    width: 25% !important; /* Уменьшите ширину, если поля всё ещё не помещаются */
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5px; /* Уменьшите отступы между полями */
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Убедитесь, что padding и border учитываются в ширине */
+}
+
+.field-box {
+    width: 33%;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+}

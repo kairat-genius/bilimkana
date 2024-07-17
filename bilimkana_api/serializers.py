@@ -1,29 +1,6 @@
 from rest_framework import serializers
-from .models import FAQ, Category, Program, Teacher, News, Events
-
-class TranslationSerializerMixin(serializers.ModelSerializer):
-    """Миксин для сериализаторов, поддерживающих переводы полей."""
-
-    def get_localized_field(self, obj, field_name, lang):
-        """
-        Получает локализованное поле в зависимости от языка.
-        """
-        default_field_name = f'{field_name}_ru'
-        lang_field_name = f'{field_name}_{lang}'
-        return getattr(obj, lang_field_name, getattr(obj, default_field_name))
-
-
-class TitleDescriptionMixin:
-    def get_title(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'title', lang)
-
-    def get_description(self, obj):
-        lang = self.context.get('lang', 'ru')
-        return self.get_localized_field(obj, 'description', lang)
-
-
-
+from .models import FAQ, Category, Program, Teacher, News, Events, Description
+from .mixin import TranslationSerializerMixin, TitleDescriptionMixin
 class FAQSerializer(TranslationSerializerMixin):
     question = serializers.SerializerMethodField()
     answer = serializers.SerializerMethodField()
@@ -78,15 +55,26 @@ class TeacherSerializer(TranslationSerializerMixin):
         lang = self.context.get('lang', 'ru')
         return self.get_localized_field(obj, 'education', lang)
 
-class NewsSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
+class DescriptionSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
     title = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
 
     class Meta:
-        model = News
-        fields = ['id', 'img', 'title', 'description']
+        model = Description
+        fields = ['id', 'title', 'description']
+
 
 class EventsSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    extra = DescriptionSerializer(many=True)
+
+    class Meta:
+        model = Events
+        fields = ['id', 'img', 'title', 'description', 'date', 'extra']
+
+
+class NewsSerializer(TranslationSerializerMixin, TitleDescriptionMixin):
     title = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
 

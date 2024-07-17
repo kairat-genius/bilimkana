@@ -1,5 +1,3 @@
-from rest_framework import generics
-from rest_framework.response import Response
 from .models import FAQ, Category, Program, Teacher, News, Events
 from .serializers import FAQSerializer, CategorySerializer, ProgramSerializer, TeacherSerializer, NewsSerializer, \
     EventsSerializer
@@ -7,34 +5,9 @@ from .serializers import FAQSerializer, CategorySerializer, ProgramSerializer, T
 from django.http import JsonResponse
 from googletrans import Translator
 import json
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema
+from .mixin import LanguageContextDetailMixin, LanguageContextListMixin
 
-@extend_schema(
-    parameters=[
-        OpenApiParameter(name='lang', type=str, location=OpenApiParameter.QUERY,
-                         description='Language code (e.g. "ru", "en", "ky") default = ru'),
-    ],
-)
-class LanguageContextListMixin(generics.ListAPIView):
-    def list(self, request, *args, **kwargs):
-        lang = request.query_params.get('lang', 'ru')
-        queryset = self.get_queryset()
-        serializer = self.serializer_class(queryset, many=True, context={'lang': lang})
-        return Response(serializer.data)
-
-@extend_schema(
-    parameters=[
-        OpenApiParameter(name='lang', type=str, location=OpenApiParameter.QUERY,
-                         description='Language code (e.g. "ru", "en", "ky") default = ru'),
-    ],
-)
-class LanguageContextDetailMixin(generics.RetrieveAPIView):
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({
-            'lang': self.request.query_params.get('lang', 'ru')
-        })
-        return context
 
 
 """Списки"""
@@ -94,7 +67,6 @@ class EventsListAPIView(LanguageContextListMixin):
 
 """Детали"""
 
-
 @extend_schema(
     description='Список программ связанные с категорий',
     tags=['Category']
@@ -144,6 +116,7 @@ class EventsDetailAPIView(LanguageContextDetailMixin):
     lookup_field = 'id'
 
 
+
 """Переводчик для админ панели"""
 def translate_text(request):
     if request.method == 'POST':
@@ -156,7 +129,9 @@ def translate_text(request):
             translated_texts = [translator.translate(text_to_translate, src='ru', dest=target_lang).text for target_lang
                                 in target_languages]
             return JsonResponse({'translated_text': translated_texts})
+
         else:
             return JsonResponse({'error': 'No text to translate'})
 
     return JsonResponse({'error': 'Invalid request method'})
+

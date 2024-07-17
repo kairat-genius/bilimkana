@@ -17,9 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from bilimkana_api.views import translate_text
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('api/', include('bilimkana_api.urls')),
+    path('translate/', translate_text, name='translate'),
 ]
