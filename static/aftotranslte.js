@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
         { mainFieldId: 'id_answer_ru', targetFieldIds: ['id_answer_en', 'id_answer_ky'] },
         { mainFieldId: 'id_question_ru', targetFieldIds: ['id_question_en', 'id_question_ky'] },
         { mainFieldId: 'id_title_ru', targetFieldIds: ['id_title_en', 'id_title_ky'] },
-        { mainFieldId: 'id_name_ru', targetFieldIds: ['id_name_en', 'id_name_ky'] },
+        { mainFieldId: 'id_full_name_ru', targetFieldIds: ['id_full_name_en', 'id_full_name_ky'] },
         { mainFieldId: 'id_speciality_ru', targetFieldIds: ['id_speciality_en', 'id_speciality_ky'] },
-        { mainFieldId: 'id_education_ru', targetFieldIds: ['id_education_en', 'id_education_ky'] },
+        { mainFieldId: 'id_education_ru', targetFieldIds: ['id_education_en', 'id_education_ky'], isCKEditor: true },
         { mainFieldId: 'id_description_ru', targetFieldIds: ['id_description_en', 'id_description_ky'], isCKEditor: true }
     ];
 

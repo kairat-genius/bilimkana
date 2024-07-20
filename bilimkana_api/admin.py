@@ -1,4 +1,4 @@
-from .models import FAQ, Category, Program, Teacher, Events, News, Description
+from .models import FAQ, Category, Program, Teacher, Events, News, Description, AboutBIU, Manager, OurPartner, EnrollmentOrder
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from modeltranslation.admin import TranslationAdmin
@@ -48,7 +48,7 @@ class ProgramAdmin(ImageMixin):
 
 @admin.register(Teacher)
 class TeacherAdmin(ImageMixin):
-    list_display = ('name', 'image_tag')
+    list_display = ('full_name', 'image_tag')
 
 
 @admin.register(Events)
@@ -73,5 +73,23 @@ class DescriptionAdmin(TranslationAdmin):
         models.TextField: {'widget': CKEditorWidget}
     }
 
+@admin.register(AboutBIU)
+class AboutBIUAdmin(ImageMixin):
+    pass
+
+@admin.register(Manager)
+class ManagerAdmin(ImageMixin):
+    list_display = ('full_name', 'post')
+
+@admin.register(OurPartner)
+class OurPartnerAdmin(ImageMixin):
+    pass
+
+@admin.register(EnrollmentOrder)
+class EnrollmentOrderAdmin(ImageMixin):
+    pass
+
 
 admin.site.site_title = "Билимкана"
+
+

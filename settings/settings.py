@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'modeltranslation',
     'django.contrib.postgres',
     'ckeditor',
+    'corsheaders',
 
 ]
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
@@ -140,6 +142,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
@@ -173,14 +178,6 @@ SPECTACULAR_SETTINGS = {
         {'name': 'Events', 'description': 'Endpoints related to Events'},
     ],
 }
-
-from django.utils.translation import gettext_lazy as _
-
-# LANGUAGES = [
-#     ('ru', _('Russian')),
-#     ('en', _('English')),
-#     ('ky', _('Kyrgyz')),
-# ]
 
 LANGUAGES = [
     ('ru', 'Russian'),
@@ -338,8 +335,6 @@ JAZZMIN_SETTINGS = {
         }]
     },
 
-    # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
-    # for the full list of 5.13.0 free icon classes
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
@@ -349,10 +344,6 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
 
-    #################
-    # Related Modal #
-    #################
-    # Use modals instead of popups
     "related_modal_active": False,
 
     # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)
@@ -360,18 +351,17 @@ JAZZMIN_SETTINGS = {
     # Whether to show the UI customizer on the sidebar
     "show_ui_builder": False,
 
-    ###############
-    # Change view #
-    ###############
-    # Render out the change view as a single form, or in tabs, current options are
-    # - single
-    # - horizontal_tabs (default)
-    # - vertical_tabs
-    # - collapsible
-    # - carousel
     "changeform_format": "horizontal_tabs",
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
 
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Адрес фронтенда
+]
+
+CORS_ALLOW_ALL_ORIGINS = True

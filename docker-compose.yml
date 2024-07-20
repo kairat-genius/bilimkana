@@ -6,20 +6,6 @@ services:
     container_name: django
     ports:
       - "8000:8000"
-    depends_on:
-      - pgdb
-
-
-  pgdb:
-    image: postgres
-    restart: always
-    container_name: pgdb
-    ports:
-      - "5435:5432"
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
 
   nginx:
     container_name: nginx
@@ -31,6 +17,22 @@ services:
     depends_on:
       - django
     restart: always
+
+
+#    depends_on:
+#      - pgdb
+#
+#
+#  pgdb:
+#    image: postgres
+#    restart: always
+#    container_name: pgdb
+#    ports:
+#      - "5435:5432"
+#    environment:
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_DB=postgres
 
 
 

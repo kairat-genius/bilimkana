@@ -1,5 +1,6 @@
-from .models import FAQ, Category, Program, Teacher, Events, News, Description
+from .models import FAQ, Category, Program, Teacher, Events, News, Description, EnrollmentOrder, OurPartner, AboutBIU, Manager
 from modeltranslation.translator import register, TranslationOptions
+
 
 @register(Category)
 class CategoryTranslationOptions(TranslationOptions):
@@ -12,7 +13,7 @@ class ProgramTranslationOptions(TranslationOptions):
 
 @register(Teacher)
 class TeacherTranslationOptions(TranslationOptions):
-    fields = ('name', 'speciality', 'education')
+    fields = ('full_name', 'speciality', 'education')
 
 
 @register(FAQ)
@@ -30,3 +31,19 @@ class NewsTranslationOptions(TranslationOptions):
 @register(Description)
 class DescriptionOptions(TranslationOptions):
     fields = ('title', 'description')
+
+@register(AboutBIU)
+class AboutBIUOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(EnrollmentOrder)
+class EnrollmentOrderOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(OurPartner)
+class OurPartnerOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+@register(Manager)
+class ManagerOptions(TranslationOptions):
+    fields = ('full_name', 'post')
