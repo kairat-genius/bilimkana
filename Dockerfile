@@ -1,17 +1,23 @@
-FROM python:3.12
+FROM python:3.11
+WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y \
-    supervisor \
-    && rm -rf /vat/lib/apt/lists/* \
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-WORKDIR /bilimsystem
+RUN pip install --upgrade pip
 
-COPY requirements.txt .
-
+COPY requirements.txt /usr/src/app/
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY . /usr/src/app/
 
-RUN chmod +x ./*.sh
+RUN apt-get update \
+    && apt-get install -y netcat-traditional \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/nc.traditional /usr/bin/nc
 
-CMD [ "./app.sh" ]
+COPY entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
