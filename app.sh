@@ -1,7 +1,23 @@
-#!/bin/bash
+FROM python:3.11
+WORKDIR /usr/src/app
 
-python manage.py makemigrations
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-python manage.py migrate
+RUN pip install --upgrade pip
 
-gunicorn --config gunicorn_config.py settings.wsgi:application
+COPY requirements /usr/src/app/
+RUN pip install -r prod.txt
+
+COPY . /usr/src/app/
+
+RUN apt-get update \
+    && apt-get install -y netcat-traditional \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/nc.traditional /usr/bin/nc
+
+COPY entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
